@@ -51,7 +51,7 @@ public:
 	void removeRenderable(size_t idx);
 	void setCameraControl(camControl* pCamCtrl) { m_pCamCtrl = pCamCtrl; }
 
-	const camControl* getCamCtrlPtr() const { return m_pCamCtrl; }
+	camControl* const & getCamCtrlPtr() const { return m_pCamCtrl; }
 
 protected:
 	/*

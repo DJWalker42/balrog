@@ -51,8 +51,9 @@ public:
 	}
 
 	//this returns a copy of the data member pointer with pointer-to-const-object qualifier.
-	const Camera* getCameraPtr() const { return m_pCamera; }
-	//Camera* const & getCameraPtr() const { return m_pCamera; } //this would return a const-pointer-to-object
+	//const Camera* getCameraPtr() const { return m_pCamera; }
+	//this returns a const pointer to the Camera object.
+	Camera* const & getCameraPtr() const { return m_pCamera; }
 
 	void setRotateAngle(const glm::vec3& angle) { m_rotateSpeed = angle; }
 	void setTranslateDistance(const glm::vec3& distance) { m_translateSpeed = distance; }
