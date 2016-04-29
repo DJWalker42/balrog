@@ -9,7 +9,7 @@ In order to use this code you will need the following:
 * Simple OpenGL Image Loader 2 (SOIL2) - https://bitbucket.org/SpartanJ/soil2
 * Asset Importer 3.x (assimp) - http://www.assimp.org/
 
-glm is a header only library i.e. no compiling. For the other dependencies follow their respective instructions to download and build the libraries. The Asset Importer library does come with a dynamically linked library. 
+glm is a header only library i.e. no compiling. For the other dependencies follow their respective instructions to download and build the libraries. The Asset Importer library will build a dynamically linked library file as well as a static library file. 
 
 On Windows when building an opengl application/executable remember to link to the `opengl32.lib` as well as other dependencies.
 
@@ -19,7 +19,7 @@ The `gl_*` source and header files were generated using the command:
 
 `lua LoadGen.lua -style=pointer_c -spec=gl -version=4.2 -profile=core core_4_2` 
 
-meaning that they target the core profile of OpenGL version 4.2 using a function-pointer-based style for C. If you want a different OpenGL profile, version, or style go to website mentioned above and follow the instructions found their. Replace the relevant files with those that you generate.
+meaning that they target the core profile of OpenGL version 4.2 using a function-pointer-based style for C. If you want a different OpenGL profile, version, or style go to website mentioned above and follow the instructions found there. Replace the relevant files with those that you generate.
 
 The examples directory currently contains a single sample of how to use the library. You will need to link this sample with the output built from the Asset Importer library (or the dll), and glfw3 library but not with SOIL2 as it doesn't use any functions from that library.(On Windows you will also need to link with opengl32.lib)
 
