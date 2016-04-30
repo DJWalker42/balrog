@@ -21,7 +21,7 @@ The `gl_*` source and header files were generated using the command:
 
 where x is replaced by the minor version of OpenGL you want to target. The command above is translated as meaning that they target the core profile of OpenGL version 4.x using a function-pointer-based style for C. If you want a different OpenGL profile, version, or style go to website mentioned above and follow the instructions found there. Replace the relevant files with those that you generate. Note that the shader scripts will need modification to change the version and profile line at the top of the files.
 
-The examples directory currently contains a single sample of how to use the library. You will need to link this sample with the output built from the source files, the assimp library, and the glfw3 library but not with SOIL2 as it doesn't use any functions from that library. On Windows you will also need to link with opengl32.lib. You will also have to add assimp's dll to your path (or copy it to the executable directory).
+The examples directory currently contains a single sample of how to use the library. You will need to link this sample with the output built from the source files, the assimp library, the glfw3 library, and the SOIL2 library. On Windows you will also need to link with opengl32.lib. You will also have to add assimp's dll to your path (or copy it to the executable directory).
 
 ###Disclaimer:
 The files contained in the resources directory are not of my creation. I obtained them from the samples directory of [MeshLab](http://meshlab.sourceforge.net/). Similarily, the data for the Sphere, Torus, and Teapot renderables were obtained via google searches. 
