@@ -1,4 +1,5 @@
-#version 420 core
+//#version 420 core
+#version 440 core
 
 in vec3 fragPos;
 in vec3 fragNorm;
