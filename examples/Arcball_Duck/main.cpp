@@ -8,7 +8,7 @@
 /*
 	Note: There was a bug in the arcball code whereby clicking on another window then clicking 
 	back into the context window occasionally made the model disappear from the view port. 
-	This was semmingly caused by the current clicked position being very close to or the same as
+	This was seemingly caused by the current clicked position being very close to or the same as
 	the previous clicked position, and that clicking back into the context window is seen as dragging.
 	This leads to a very small or zero angle bewteen positions and an almost zero or zero camera axis when computed. 
 	This inturn makes the transform calculation go wonky. 
