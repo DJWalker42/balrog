@@ -25,3 +25,6 @@ The examples directory currently contains a single sample of how to use the libr
 
 ###Disclaimer:
 The files contained in the resources directory are not of my creation. I obtained them from the samples directory of [MeshLab](http://meshlab.sourceforge.net/). Similarily, the data for the Sphere, Torus, and Teapot renderables were obtained via google searches. 
+
+####Why balrog?
+I had been watching LOTR at the time of creating the repository - plus its got the letters 'o', 'g', and 'l'.
