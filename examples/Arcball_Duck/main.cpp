@@ -20,9 +20,9 @@
 //put varibles here we might want to change 
 namespace{
 	// -- change the paths to where you have saved the shaders/data.
-	std::string vertexShader("C:/OpenGL/myLib/shaders/basicVertex.vert");
-	std::string fragmentShader("C:/OpenGL/myLib/shaders/PhongOren.frag");
-	std::string meshModelData("C:/OpenGL/myLib/resource/duck_triangulate.dae");
+	std::string vertexShader("C:/OpenGL/balrog/shaders/basicVertex.vert");
+	std::string fragmentShader("C:/OpenGL/balrog/shaders/PhongOren.frag");
+	std::string meshModelData("C:/OpenGL/balrog/resource/duck_triangulate.dae");
 
 	//window stuff
 	std::string winTitle("Duck, Fuzzy?");
@@ -86,6 +86,8 @@ int main(){
 	//print instructions and run the scene
 	printInstructions();
 	app::run(&scene, clearColour);
+
+
 	
 	return EXIT_SUCCESS;
 }
