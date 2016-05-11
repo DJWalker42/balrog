@@ -161,7 +161,7 @@ namespace app{
 			glfwSwapBuffers(g_window); //uses double buffering - front buffer is displayed while back buffer is being drawn, swaps buffers at screen refresh rate(?)
 			
 
-			//first attempt at normalising the "speed" of the application depending on how the hardware on which it is run.
+			//first attempt at normalising the "speed" of the application depending on the hardware on which it is run.
 			double elapsed = glfwGetTime() - start;
 			p_localCamCtrl->setTranslateDistance(baseTranslateSpeed * float(elapsed));
 
