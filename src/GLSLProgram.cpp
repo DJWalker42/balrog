@@ -2,6 +2,8 @@
 #include <GLSLProgram.h>
 #include <iostream>
 
+#include <stdint.h> //suppress warning about void* different size to int ln 167
+
 namespace GLSLShaderInfo {
 	struct shader_file_extension {
 		std::string ext;
@@ -48,7 +50,7 @@ GLSLProgram::GLSLProgram(	const std::string& vertex_shader_fn,
 
 GLSLProgram::GLSLProgram(	const std::vector<std::string>& shader_fns) :
 							m_shaderObjList(),
-							m_shaderProg(glCreateProgram()),	
+							m_shaderProg(glCreateProgram()),
 							m_shaderName(GLSLUtils::getFilename(shader_fns[0]))
 {
 	if (m_shaderProg == 0) {
@@ -162,7 +164,7 @@ void GLSLProgram::setAttribute(const std::string& aName, GLint size,
 		throw std::runtime_error("The attribute " + aName + " is not delcared in the " + m_shaderName + " program\n");
 	}
 	glEnableVertexAttribArray(loc);
-	glVertexAttribPointer(loc, size, dType, norm, stride, (void*)offset);
+	glVertexAttribPointer(loc, size, dType, norm, stride, (void*)(intptr_t)offset); //suppress warning with type cast.
 }
 
 GLint GLSLProgram::getUniformLocation(const std::string& name){
