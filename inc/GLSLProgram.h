@@ -3,7 +3,7 @@
 
 #include <vector>
 #include <string>
-#include <gl_core_4_2.h>
+#include <gl_core_4_1.h>
 #include <glm/glm.hpp>
 
 namespace GLSLShader {
@@ -20,7 +20,7 @@ namespace GLSLShader {
 
 class GLSLProgram{
 public:
-	GLSLProgram(const std::string& vertex_shader_fn, 
+	GLSLProgram(const std::string& vertex_shader_fn,
 				const std::string& frag_shader_fn);
 
 	GLSLProgram(std::vector<std::string> const& shader_filenames);
@@ -43,13 +43,13 @@ public:
 	GLint getUniformLocation(const std::string& uniformName);
 	GLint getProgramParameter(GLint parameter);
 
-	void setAttribute(const std::string& attribName, GLint size, 
+	void setAttribute(const std::string& attribName, GLint size,
 		GLenum dataType = GL_FLOAT, GLboolean normalised = GL_FALSE,  GLint stride = 0, GLint offset = 0);
 
 	void bindAttributeLocation(GLuint location, const std::string& name);
 	void bindFragDataLocation(GLuint location, const std::string& name);
 
-	void setUniform(const std::string& name, GLfloat x, GLfloat y, GLfloat z); 
+	void setUniform(const std::string& name, GLfloat x, GLfloat y, GLfloat z);
 
 	void setUniform(const std::string& name, GLfloat val);
 	void setUniform(const std::string& name, GLboolean val);

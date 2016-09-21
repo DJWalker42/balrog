@@ -1,4 +1,4 @@
-#include <Cube.hpp>
+#include <Cube.h>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
@@ -115,7 +115,7 @@ void Cube::init_normals()
 		0.f, 0.f, 1.f,
 		0.f, 0.f, 1.f,
 
-		/*Top*/ 
+		/*Top*/
 		0.f, 1.f, 0.f,
 		0.f, 1.f, 0.f,
 		0.f, 1.f, 0.f,
@@ -178,12 +178,12 @@ void Cube::init_indices()
 
 }
 
-void Cube::render() const 
+void Cube::render() const
 {
 	glBindVertexArray(m_vao);
 	if (m_pTexture) {
 		m_pTexture->bind();
-		glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_SHORT, 0);	
+		glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_SHORT, 0);
 		m_pTexture->unbind();
 	} else {
 		glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_SHORT, 0);

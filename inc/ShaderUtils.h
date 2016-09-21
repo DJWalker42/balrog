@@ -3,7 +3,7 @@
 
 #define _CRT_SECURE_NO_WARNINGS
 
-#include <gl_core_4_2.h>
+#include <gl_core_4_1.h>
 #include <string>
 
 namespace GLSLUtils{

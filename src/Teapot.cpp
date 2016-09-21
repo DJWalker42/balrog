@@ -5,22 +5,22 @@
 #include <GLFW/glfw3.h>
 #include <glm/gtc/matrix_transform.hpp>
 
-/* 
+/*
 	The code to generate, build and eavluate the patches was obtained via google search.
-	However, I failed to note down the specific website I got it from but there are plenty of sources. 
+	However, I failed to note down the specific website I got it from but there are plenty of sources.
 
 	The code creating and drawing the Teapot class is my own.
 */
 
 
-Teapot::Teapot(	int grid, 
+Teapot::Teapot(	int grid,
 				const glm::mat4& startModel,
-				const glm::mat4& lidTransform, 
+				const glm::mat4& lidTransform,
 				Texture* pTexture) :
 				Renderable(4, startModel),
 				m_pTexture(pTexture),
-				m_grid(grid),
 				m_faces(32 * grid * grid),
+				m_grid(grid),
 				m_lidTransform(lidTransform)
 {
 	int verts = 32 * (m_grid + 1) * (m_grid + 1);
@@ -81,7 +81,7 @@ glm::mat4 Teapot::rotate(const glm::vec3& rot_vec) const
 }
 
 
-void Teapot::generatePatches(float * v, float * n, float * tc, unsigned int* el, int grid) 
+void Teapot::generatePatches(float * v, float * n, float * tc, unsigned int* el, int grid)
 {
 	float * B = new float[4 * (grid + 1)];  // Pre-computed Bernstein basis functions
 	float * dB = new float[4 * (grid + 1)]; // Pre-computed derivitives of basis functions
@@ -114,7 +114,7 @@ void Teapot::generatePatches(float * v, float * n, float * tc, unsigned int* el,
 	delete[] dB;
 }
 
-void Teapot::moveLid(int grid, float *v, const glm::mat4& lidTransform) 
+void Teapot::moveLid(int grid, float *v, const glm::mat4& lidTransform)
 {
 	int start = 3 * 12 * (grid + 1) * (grid + 1);
 	int end = 3 * 20 * (grid + 1) * (grid + 1);
@@ -241,7 +241,7 @@ void Teapot::getPatch(int patchNum, glm::vec3 patch[][4], bool reverseV)
 	}
 }//!< needed to remember the paused state
 
-void Teapot::computeBasisFunctions(float * B, float * dB, int grid) 
+void Teapot::computeBasisFunctions(float * B, float * dB, int grid)
 {
 	float inc = 1.0f / grid;
 	for (int i = 0; i <= grid; i++) {
@@ -294,7 +294,7 @@ glm::vec3 Teapot::evaluateNormal(int gridU, int gridV, float *B, float *dB, glm:
 	return norm;
 }
 
-void Teapot::render() const 
+void Teapot::render() const
 {
 	glBindVertexArray(m_vao);
 	if (m_pTexture){

@@ -2,14 +2,14 @@
 #define DJW_TEAPOT_H
 
 #include <Renderable.h>
-#include <Texture.hpp>
+#include <Texture.h>
 #include <glm/glm.hpp>
 
 class Teapot : public Renderable{
 public:
-	Teapot(	int grid, 
-			const glm::mat4& startModel = glm::mat4(), 
-			const glm::mat4& lidTransform = glm::mat4(), 
+	Teapot(	int grid,
+			const glm::mat4& startModel = glm::mat4(),
+			const glm::mat4& lidTransform = glm::mat4(),
 			Texture* pTexture = nullptr);
 
 	~Teapot();

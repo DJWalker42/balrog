@@ -3,7 +3,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 //----------------------------------------------------------------------------------------
-Frustum::Frustum(): 
+Frustum::Frustum():
 			m_vFOV(0.0f),
 			m_aspectRatio(0.0f),
 			m_zNear(0.0f),
@@ -14,14 +14,14 @@ Frustum::Frustum():
 {}
 
 //----------------------------------------------------------------------------------------
-Frustum::Frustum(const Frustum & frustum): 
+Frustum::Frustum(const Frustum & frustum):
 			m_vFOV(frustum.m_vFOV),
 			m_aspectRatio(frustum.m_aspectRatio),
 			m_zNear(frustum.m_zNear),
 			m_zFar(frustum.m_zFar),
 			m_recalcPerspectiveMatrix(frustum.m_recalcPerspectiveMatrix),
 			m_projType(frustum.m_projType),
-			m_projectionMatrix(frustum.m_projectionMatrix) 
+			m_projectionMatrix(frustum.m_projectionMatrix)
 {}
 
 //----------------------------------------------------------------------------------------
@@ -70,11 +70,11 @@ Frustum::Frustum(float left, float right, float bottom, float top, float zNear, 
 * @param zNear - distance to near z clipping plane (strictly positive i.e. always > 0).
 * @param zFar - distance to far z clipping plane (striclty positive i.e. always > 0).
 */
-Frustum::Frustum(float fieldOfViewY, float aspectRatio, float zNear, float zFar): 
+Frustum::Frustum(float fieldOfViewY, float aspectRatio, float zNear, float zFar):
 	m_vFOV(fieldOfViewY),
 	m_aspectRatio(aspectRatio),
 	m_viewWidth(-1.f),
-	m_viewHeight(-1.f), 
+	m_viewHeight(-1.f),
 	m_zNear(zNear),
 	m_zFar(zFar),
 	m_recalcPerspectiveMatrix(false),
@@ -85,7 +85,7 @@ Frustum::Frustum(float fieldOfViewY, float aspectRatio, float zNear, float zFar)
 
 //----------------------------------------------------------------------------------------
 /**
-* Constructs a perspective projection view \c Frustum with maintained aspected ratio 
+* Constructs a perspective projection view \c Frustum with maintained aspected ratio
 *
 * @param fieldOfViewY vertical field of view in degrees
 * @param viewWidth
@@ -93,7 +93,7 @@ Frustum::Frustum(float fieldOfViewY, float aspectRatio, float zNear, float zFar)
 * @param m_zNear - distance to near z clipping plane (strictly positive i.e. always > 0).
 * @param m_zFar - distance to far z clipping plane (strictly positive i.e. always > 0).
 */
-Frustum::Frustum(float fieldOfViewY, float viewWidth, float viewHeight, float zNear, float zFar): 
+Frustum::Frustum(float fieldOfViewY, float viewWidth, float viewHeight, float zNear, float zFar):
 			m_vFOV(fieldOfViewY),
 			m_aspectRatio(viewWidth / viewHeight),
 			m_viewWidth(viewWidth),
@@ -106,7 +106,7 @@ Frustum::Frustum(float fieldOfViewY, float viewWidth, float viewHeight, float zN
 {}
 
 //----------------------------------------------------------------------------------------
-glm::mat4 Frustum::getProjectionMatrix() const 
+glm::mat4 Frustum::getProjectionMatrix() const
 {
 	if (m_recalcPerspectiveMatrix) {
 		switch(m_projType){
@@ -116,6 +116,8 @@ glm::mat4 Frustum::getProjectionMatrix() const
 		case PFOV:
 			m_projectionMatrix = glm::perspectiveFov(glm::radians(m_vFOV), m_viewWidth, m_viewHeight, m_zNear, m_zFar);
 			break;
+		case ORTHO:
+			break; //no projection Matrix
 		}
 		m_recalcPerspectiveMatrix = false;
 	}
@@ -123,41 +125,41 @@ glm::mat4 Frustum::getProjectionMatrix() const
 }
 
 //----------------------------------------------------------------------------------------
-float Frustum::getFieldOfViewY() const 
+float Frustum::getFieldOfViewY() const
 {
 	return m_vFOV;
 }
 
 //----------------------------------------------------------------------------------------
-float Frustum::getAspectRatio() const 
+float Frustum::getAspectRatio() const
 {
 	return m_aspectRatio;
 }
 
-int Frustum::getViewWidth() const 
+int Frustum::getViewWidth() const
 {
 	return static_cast<int>(m_viewWidth);
 }
 
-int Frustum::getViewHeight() const 
+int Frustum::getViewHeight() const
 {
 	return static_cast<int>(m_viewHeight);
 }
 
 //----------------------------------------------------------------------------------------
-float Frustum::getNearZDistance() const 
+float Frustum::getNearZDistance() const
 {
 	return m_zNear;
 }
 
 //----------------------------------------------------------------------------------------
-float Frustum::getFarZDistance() const 
+float Frustum::getFarZDistance() const
 {
 	return m_zFar;
 }
 
 //----------------------------------------------------------------------------------------
-bool Frustum::isPerspective() const 
+bool Frustum::isPerspective() const
 {
 	if(m_projType == PERS || m_projType == PFOV){
 		return true;
@@ -167,7 +169,7 @@ bool Frustum::isPerspective() const
 }
 
 //----------------------------------------------------------------------------------------
-bool Frustum::isOrthographic() const 
+bool Frustum::isOrthographic() const
 {
 	if (m_projType == ORTHO){
 		return true;
@@ -177,7 +179,7 @@ bool Frustum::isOrthographic() const
 }
 
 //----------------------------------------------------------------------------------------
-void Frustum::setFieldOfViewY(float fieldOfViewY) 
+void Frustum::setFieldOfViewY(float fieldOfViewY)
 {
 	//account for negative values
 	if (fieldOfViewY < 0.0f){
@@ -194,44 +196,42 @@ void Frustum::setFieldOfViewY(float fieldOfViewY)
 }
 
 //----------------------------------------------------------------------------------------
-void Frustum::setAspectRatio(float aspectRatio) 
+void Frustum::setAspectRatio(float aspectRatio)
 {
 	this->m_aspectRatio = aspectRatio;
 	m_recalcPerspectiveMatrix = true;
 }
 
 //----------------------------------------------------------------------------------------
-void Frustum::setViewWidth(float width) 
+void Frustum::setViewWidth(float width)
 {
 	this->m_viewWidth = width;
 	m_recalcPerspectiveMatrix = true;
 }
 
 //----------------------------------------------------------------------------------------
-void Frustum::setViewHeight(float height) 
+void Frustum::setViewHeight(float height)
 {
 	this->m_viewHeight = height;
 	m_recalcPerspectiveMatrix = true;
 }
 
 //----------------------------------------------------------------------------------------
-void Frustum::setNearZDistance(float m_zNear) 
+void Frustum::setNearZDistance(float m_zNear)
 {
 	this->m_zNear = m_zNear;
 	m_recalcPerspectiveMatrix = true;
 }
 
 //----------------------------------------------------------------------------------------
-void Frustum::setFarZDistance(float m_zFar) 
+void Frustum::setFarZDistance(float m_zFar)
 {
 	this->m_zFar = m_zFar;
 	m_recalcPerspectiveMatrix = true;
 }
 
 //----------------------------------------------------------------------------------------
-void Frustum::setProjectionMatrix(const glm::mat4 & projectionMatrix) 
+void Frustum::setProjectionMatrix(const glm::mat4 & projectionMatrix)
 {
 	this->m_projectionMatrix = projectionMatrix;
 }
-
-

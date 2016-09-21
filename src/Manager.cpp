@@ -1,16 +1,16 @@
 #include <Manager.h>
-#include <Arcball.hpp>
+#include <Arcball.h>
 #include <freeCamControl.h>
 #include <WASDControl.h>
 
 namespace app{
 
 	/*
-		For general and demonstrative purposes we need instances of each camera control method for quick 
-		and convenient access to each. In a "real" application we'd pick just one camera control method. 
+		For general and demonstrative purposes we need instances of each camera control method for quick
+		and convenient access to each. In a "real" application we'd pick just one camera control method.
 
-		Specific camera control methods are implemented as Singleton Classes. 
-	
+		Specific camera control methods are implemented as Singleton Classes.
+
 	*/
 	namespace {
 		Arcball& g_camCtrlArc = Arcball::getInstance();
@@ -25,8 +25,8 @@ namespace app{
 		glm::vec3 baseRotateSpeed;
 	}
 
-	void initViewPort(	GLFWwindow* window, 
-						Camera* pCamera, 
+	void initViewPort(	GLFWwindow* window,
+						Camera* pCamera,
 						camCtrl whichCtrl,
 						const glm::vec3& tSpeeds,
 						const glm::vec3& rSpeeds)
@@ -43,7 +43,7 @@ namespace app{
 			g_camCtrlArc.registerCamera(pCamera);
 			g_camCtrlArc.setTranslateDistance(tSpeeds);
 			g_camCtrlArc.setRotateAngle(rSpeeds);
-		
+
 			break;
 		case FREE:
 			camCtrlChoice = FREE;
@@ -78,7 +78,7 @@ namespace app{
 		}
 
 		baseTranslateSpeed = tSpeeds;
-		baseRotateSpeed = rSpeeds; 
+		baseRotateSpeed = rSpeeds;
 
 		g_window = window;
 		viewPortInit = true;
@@ -107,7 +107,7 @@ namespace app{
 		if (pScene->getCamCtrlPtr() == nullptr) {
 			if(!viewPortInit) {
 				std::cerr << "\nNo camera control method specified\n\n";
-				glfwTerminate(); 
+				glfwTerminate();
 				return;
 			}
 
@@ -127,7 +127,7 @@ namespace app{
 		camControl* p_localCamCtrl = pScene->getCamCtrlPtr();
 
 		//initialise the scene - user defined but typically consists of initialising each renderable's buffer data
-		// setting up some constant variables/shader uniforms, enabling the opengl depth test, etc. 
+		// setting up some constant variables/shader uniforms, enabling the opengl depth test, etc.
 		pScene->initScene(g_window);
 
 		//used to implement a pause functionality
@@ -148,25 +148,25 @@ namespace app{
 				pause = !pause; //toggle the pause
 			}
 			prevState = state;
-			
+
 			//update the scene - typically processes the pause toggle, then does anything else you need - processing program logic,
 			//applying updates to renderable objects, modifying shader variables, and so on. It is here we could apply some depth sorting
 			//after the updates have been applied so that the renderable objects are draw from back to front in the view port e.g. using "oct-trees"
 			double start = glfwGetTime();
 			pScene->updateScene(prevTime, start, pause, g_window);
-		
-			//Render the scene - typically gets and applies changes to the model, view, and projection matrices (and any associated matrices, 
-			//for example, the normal matrix) then calls the render member function for each object in the renderable list (vector).  
+
+			//Render the scene - typically gets and applies changes to the model, view, and projection matrices (and any associated matrices,
+			//for example, the normal matrix) then calls the render member function for each object in the renderable list (vector).
 			pScene->drawScene();
 
 			glfwSwapBuffers(g_window); //uses double buffering - front buffer is displayed while back buffer is being drawn, swaps buffers at screen refresh rate(?)
-			
+
 
 			//first attempt at normalising the "speed" of the application depending on the hardware on which it is run.
 			double elapsed = glfwGetTime() - start;
 			p_localCamCtrl->setTranslateDistance(baseTranslateSpeed * float(elapsed));
 
-			if (camCtrlChoice != ARC ) {//the arcball becomes jittery otherwise 
+			if (camCtrlChoice != ARC ) {//the arcball becomes jittery otherwise
 				p_localCamCtrl->setRotateAngle(baseRotateSpeed * float(elapsed));
 			}
 

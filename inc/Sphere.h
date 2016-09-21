@@ -2,13 +2,13 @@
 #define DJW_SPHERE_H
 
 #include <Renderable.h>
-#include <Texture.hpp>
+#include <Texture.h>
 
 class Sphere : public Renderable
 {
 public:
-	Sphere(	float radius, 
-			GLuint slices, 
+	Sphere(	float radius,
+			GLuint slices,
 			GLuint stacks,
 			const glm::mat4& initialPos = glm::mat4(),
 			Texture* pTexture = nullptr);
@@ -22,7 +22,7 @@ private:
 
 private:
 	Texture* m_pTexture;
-	
+
 	float m_radius;
 	GLuint m_slices, m_stacks;
 	GLuint m_nVerts, m_elements;

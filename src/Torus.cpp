@@ -4,17 +4,17 @@
 
 Torus::Torus(	const glm::mat4& initialPos,
 				Texture* pTexture,
-				float outerRadius, 
-				float innerRadius, 
-				int nsides, 
+				float outerRadius,
+				float innerRadius,
+				int nsides,
 				int nrings	) :
 				Renderable(4, initialPos),
+				m_pTexture(pTexture),
 				m_outerRadius(outerRadius),
 				m_innerRadius(innerRadius),
-				m_rings(nrings), 
-				m_sides(nsides),
-				m_faces( m_rings * m_sides ),
-				m_pTexture(pTexture)
+				m_rings(nrings),
+				m_sides(nsides),				
+				m_faces( m_rings * m_sides )
 {
 	int nVerts = m_sides * (m_rings + 1);   // One extra ring to duplicate first ring
 
@@ -71,7 +71,7 @@ void Torus::load(GLSLProgram* pShader)
 }
 
 
-void Torus::render() const 
+void Torus::render() const
 {
 	glBindVertexArray(m_vao);
 

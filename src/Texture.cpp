@@ -1,4 +1,4 @@
-#include <Texture.hpp>
+#include <Texture.h>
 #include <SOIL2.h>
 #include <iostream>
 
@@ -13,7 +13,7 @@ Texture::Texture(	GLenum texTarg,
 	//this base constructor is used in the construction of a cubeMapTexture which has its own load
 	if (texTarg != GL_TEXTURE_CUBE_MAP) {
 		if(!load()){
-			std::cout << glGetError() << "\n"; 
+			std::cout << glGetError() << "\n";
 			throw std::runtime_error("Texture failed to load from " + fn + "\n");
 		}
 	}
@@ -43,9 +43,9 @@ bool Texture::load()
 
 	for(size_t i = 0; i < m_textureObjs.size(); ++i){
 		m_textureObjs[i] = SOIL_load_OGL_texture
-			(	m_filenames[i].c_str(), 
-				SOIL_LOAD_AUTO, 
-				SOIL_CREATE_NEW_ID, 
+			(	m_filenames[i].c_str(),
+				SOIL_LOAD_AUTO,
+				SOIL_CREATE_NEW_ID,
 				SOIL_FLAG_MIPMAPS | (m_meshFlippedUV ? 0 : SOIL_FLAG_INVERT_Y)
 			);
 
@@ -60,7 +60,7 @@ bool Texture::load()
 		glTexParameterf(m_textureTarget, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameterf(m_textureTarget, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	}
-	
+
 	return true; //glGetError() == GL_NO_ERROR;
 }
 

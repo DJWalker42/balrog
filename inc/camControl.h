@@ -2,22 +2,22 @@
 #define DJW_CONTROL_H
 
 #include <glm/glm.hpp>
-#include <Camera.hpp>
+#include <Camera.h>
 
 namespace rot{
 	enum {ROLL_P, ROLL_N, PITCH_P, PITCH_N, YAW_P, YAW_N};
 }
 
 
-namespace glfw{ 
+namespace glfw{
 	const int numOfKeys = 1024;
-	const int numOfMouseButtons = 8; 
+	const int numOfMouseButtons = 8;
 }
 
 class camControl
 {
 protected:
-	camControl(const glm::vec3& translateSpeed, const glm::vec3& rotateSpeed) : 
+	camControl(const glm::vec3& translateSpeed, const glm::vec3& rotateSpeed) :
 		m_pCamera(nullptr),
 		m_viewMatrix(),
 		m_windowWidth(0),
@@ -26,12 +26,12 @@ protected:
 		m_rotateSpeed(rotateSpeed)
 	{
 		for(int i = 0; i < glfw::numOfKeys; ++i){
-			m_keys[i] = false;	
+			m_keys[i] = false;
 		}
 	}
 
 public:
-	virtual ~camControl() {} 
+	virtual ~camControl() {}
 
 public:
 
@@ -83,16 +83,16 @@ public:
 
 protected:
 	Camera* m_pCamera;
-	glm::mat4 m_viewMatrix;	
+	glm::mat4 m_viewMatrix;
 	int m_windowWidth;
-	int m_windowHeight; 
+	int m_windowHeight;
 
 	glm::vec3 m_translateSpeed;
-	glm::vec3 m_rotateSpeed; 
+	glm::vec3 m_rotateSpeed;
 
 	bool m_keys[glfw::numOfKeys];
 	bool m_mouse[glfw::numOfMouseButtons];
-}; 
+};
 
 
 #endif

@@ -1,10 +1,10 @@
 #ifndef POINTCLOUD_H
 #define POINTCLOUD_H
 
-#include <gl_core_4_2.h>
+#include <gl_core_4_1.h>
 #include <glm/glm.hpp>
 #include <Renderable.h>
-#include <GLSLProgram.hpp>
+#include <GLSLProgram.h>
 
 #include <string>
 #include <vector>
@@ -19,27 +19,27 @@
 class pointCloud : public Renderable{
 public:
 
-	pointCloud(	const std::string& points_file, 
+	pointCloud(	const std::string& points_file,
 				const std::string& colour_file = std::string(),
 				const std::string& normal_file = std::string(),
 				GLfloat pointSize = 1.f);
-			
+
 	~pointCloud();
 
-	bool readPointCloud( const std::string& filename ); 
+	bool readPointCloud( const std::string& filename );
 
 	bool readImage( const std::string& filename );
 
 	void readNormals( const std::string& filename );
 
-	virtual void load(GLSLProgram*); 
-	virtual void render() const; 
+	virtual void load(GLSLProgram*);
+	virtual void render() const;
 
 protected:
 
 private: /* Un-copyable */
 	pointCloud( const pointCloud& );
-	pointCloud& operator=(const pointCloud&); 
+	pointCloud& operator=(const pointCloud&);
 
 private:
 
@@ -58,7 +58,7 @@ private:
 			m_vVertices[i + 1] -= centroid_y;
 			m_vVertices[i + 2] -= centroid_z;
 
-		}			
+		}
 	}
 
 	bool readPoint(const std::string& line)
@@ -78,7 +78,7 @@ private:
 			m_max_z = fabs(z) > m_max_z ? fabs(z) : m_max_z;
 
 			m_min_z = fabs(z) < m_min_z ? fabs(z) : m_min_z;
-			
+
 			m_sum_x += x;
 			m_sum_y += y;
 			m_sum_z += z;
@@ -88,7 +88,7 @@ private:
 			m_vVertices.push_back(z);
 
 			return true;
-		} 
+		}
 		else
 			return false;
 
@@ -122,13 +122,13 @@ private:
 	float m_max_x;
 	float m_max_y;
 	float m_max_z;
-	float m_min_z; 
+	float m_min_z;
 
 	float m_sum_x;
 	float m_sum_y;
 	float m_sum_z;
 
 	std::list<int> m_listSkip;
-}; 
+};
 
-#endif 
+#endif

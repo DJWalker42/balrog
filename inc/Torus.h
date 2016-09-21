@@ -2,16 +2,16 @@
 #define DJW_TORUS_H
 
 #include <Renderable.h>
-#include <Texture.hpp>
+#include <Texture.h>
 
 class Torus : public Renderable
 {
 public:
 	Torus(	const glm::mat4& initialPos,
 			Texture* pTexture,
-			float outerRadius, 
-			float innerRadius, 
-			int numSides, 
+			float outerRadius,
+			float innerRadius,
+			int numSides,
 			int numRings );
 
 	~Torus();

@@ -1,4 +1,4 @@
-#include <Arcball.hpp>
+#include <Arcball.h>
 #include <algorithm> //std::min
 
 
@@ -14,9 +14,9 @@ Arcball::Arcball(	GLfloat roll_speed,
 					m_dragging(false),
 					m_zoom_pos(false),
 					m_zoom_neg(false),
-					m_prevTrans(1.f),
-					m_currTrans(1.f),
 					m_angle(0.f),
+					m_prevTrans(1.f),
+					m_currTrans(1.f),					
 					m_camAxis(0.f, 1.f, 0.f)
 {}
 
@@ -24,7 +24,7 @@ Arcball::Arcball(	GLfloat roll_speed,
 * Convert the mouse cursor coordinate on the window (i.e. from (0,0) to (windowWidth, windowHeight))
 * into normalized screen coordinate , i.e. (-1, -1) to (1, 1)
 */
-glm::vec3 Arcball::toScreenCoord(double x, double y) 
+glm::vec3 Arcball::toScreenCoord(double x, double y)
 {
 	glm::vec3 coord(0.0f);
 
@@ -67,7 +67,7 @@ void Arcball::mouseButtonCallbackImpl(GLFWwindow * window, int button, int actio
 	double x, y;
 	glfwGetCursorPos(window, &x, &y);
 
-	m_clicked = m_mouse[GLFW_MOUSE_BUTTON_LEFT]; 
+	m_clicked = m_mouse[GLFW_MOUSE_BUTTON_LEFT];
 
 	if(m_clicked){
 		m_prevPos = toScreenCoord(x, y);
@@ -83,7 +83,7 @@ void Arcball::cursorCallbackImpl(GLFWwindow *window, double x, double y)
 {
 	if (m_clicked) {
 		m_dragging = true;
-		
+
 		m_currPos = toScreenCoord(x, y);
 
 		/* Calculate the angle in radians, and clamp it between 0 and pi/2 */
@@ -105,7 +105,7 @@ void Arcball::cursorCallbackImpl(GLFWwindow *window, double x, double y)
 */
 void Arcball::framebufferSizeCallbackImpl(GLFWwindow* window, int width, int height)
 {
-	glViewport(0,0,width, height); 
+	glViewport(0,0,width, height);
 
 	//pass new values to the camera's frustrum to update projection matrix
 	m_pCamera->setViewWidth(static_cast<float>(width));

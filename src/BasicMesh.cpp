@@ -1,4 +1,4 @@
-#include <BasicMesh.hpp>
+#include <BasicMesh.h>
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>
 #include <assimp/scene.h>
@@ -6,8 +6,8 @@
 #include <iostream>
 
 BasicMesh::BasicMesh(	const glm::mat4& model,
-						const std::string& meshFile, 
-						const std::string& texFile) : 
+						const std::string& meshFile,
+						const std::string& texFile) :
 						Renderable(6, model),
 						m_meshFile(meshFile),
 						m_entries(),
@@ -16,7 +16,7 @@ BasicMesh::BasicMesh(	const glm::mat4& model,
 	if (!texFile.empty())
 		m_pTextures.push_back(new Texture(GL_TEXTURE_2D, texFile));
 
-	Assimp::Importer assImport; //ha!! 
+	Assimp::Importer assImport; //ha!!
 	const aiScene* pScene = assImport.ReadFile(m_meshFile.c_str(),
 		aiProcess_Triangulate |
 		aiProcess_GenSmoothNormals |
@@ -47,7 +47,7 @@ void BasicMesh::clear()
 
 void BasicMesh::load(GLSLProgram* pShader)
 {
-	glBindVertexArray(m_vao); 
+	glBindVertexArray(m_vao);
 	glBindBuffer(GL_ARRAY_BUFFER, m_buffers[VB::POSITION]);
 	pShader->setAttribute("position", 3);
 
@@ -131,10 +131,10 @@ void BasicMesh::initMesh(	const aiMesh* paiMesh,
 		const aiVector3D* pPos = &(paiMesh->mVertices[i]);
 		const aiVector3D* pTexCoord = paiMesh->HasTextureCoords(0) ? &(paiMesh->mTextureCoords[0][i]) : &Zero3D;
 		const aiVector3D* pNormal = &(paiMesh->mNormals[i]);
-		
+
 		Positions.push_back(glm::vec3(pPos->x, pPos->y, pPos->z));
 		TexCoords.push_back(glm::vec2(pTexCoord->x, pTexCoord->y));
-		Normals.push_back(glm::vec3(pNormal->x, pNormal->y, pNormal->z));		
+		Normals.push_back(glm::vec3(pNormal->x, pNormal->y, pNormal->z));
 	}
 
 	// Populate the index buffer
@@ -212,7 +212,7 @@ void BasicMesh::render() const
 			m_entries[i].s_baseVertex);
 	}
 
-	// Make sure the VAO is not changed from the outside    
+	// Make sure the VAO is not changed from the outside
 	glBindVertexArray(0);
 }
 
@@ -243,6 +243,6 @@ void BasicMesh::render(size_t NumInstances, const glm::mat4& MVPMats, const glm:
 											m_entries[i].s_baseVertex);
 	}
 
-	// Make sure the VAO is not changed from the outside    
+	// Make sure the VAO is not changed from the outside
 	glBindVertexArray(0);
 }

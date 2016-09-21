@@ -1,12 +1,12 @@
 #ifndef RENDERABLE_H
 #define RENDERABLE_H
 
-#include <GLSLProgram.hpp>
+#include <GLSLProgram.h>
 #include <glm/glm.hpp>
 
 class Renderable{
 protected:
-	Renderable(size_t numBuffers, const glm::mat4& model = glm::mat4()) : 
+	Renderable(size_t numBuffers, const glm::mat4& model = glm::mat4()) :
 		m_model(model),
 		m_animation(),
 		m_vao(),
@@ -14,7 +14,7 @@ protected:
 	{
 		glGenVertexArrays(1, &m_vao);
 		glBindVertexArray(m_vao);
-		glGenBuffers(numBuffers, m_buffers.data()); 	
+		glGenBuffers(numBuffers, m_buffers.data());
 	}
 
 public:
@@ -26,7 +26,7 @@ public:
 		if (m_vao != 0) {
 			glDeleteVertexArrays(1, &m_vao);
 			m_vao = 0;
-		}	
+		}
 	}
 
 public:
@@ -38,14 +38,14 @@ public:
 
 	void setModelMatrix(const glm::mat4& model) { m_model = model; }
 	void setAnimation(const glm::mat4& animation) { m_animation = animation; }
-	
+
 protected:
 	glm::mat4 m_model;
 	glm::mat4 m_animation;
 	GLuint m_vao;
-	std::vector<GLuint> m_buffers; 
+	std::vector<GLuint> m_buffers;
 	enum VB{ POSITION, TEXCOORD, NORMAL, INDEX, MVP, WORLD };
 };
 
 
-#endif 
+#endif

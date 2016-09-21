@@ -5,7 +5,7 @@ IScene::IScene(	const std::vector<Renderable*>& renderList,
 				camControl* pCamControl	) :
 				m_renderList(renderList),
 				m_shaderList(pShader ? std::vector<GLSLProgram*>(1, pShader) : std::vector<GLSLProgram*>()),
-				m_pCamCtrl(pCamControl), 
+				m_pCamCtrl(pCamControl),
 				m_pWindow(nullptr),
 				m_prevModelMats(m_renderList.size()),
 				m_paused(false),
@@ -45,7 +45,7 @@ void IScene::removeRenderable(size_t idx)
 #endif
 	auto it = m_renderList.begin();
 	std::advance(it, idx);
-	m_renderList.erase(it); 
+	m_renderList.erase(it);
 }
 
 void IScene::processPause(double t, bool paused)
@@ -79,7 +79,7 @@ void IScene::initScene(GLFWwindow* window)
 
 	//set up the uniforms in your specific GLSL Program.
 	//he we assume there are two structures the first called Light that has position and intensity data members,
-	//and the sceond called Material that has coefficients for diffuse, specular, and ambient reflection properties, as 
+	//and the sceond called Material that has coefficients for diffuse, specular, and ambient reflection properties, as
 	//well as a shinyness factor (i.e. a Phong model of shading).
 	(*it_s)->setUniform("Light.Position", glm::vec4(0.0f, 1.0f, 5.0f, 1.0f));
 	(*it_s)->setUniform("Light.Intensity", glm::vec3(10.0f, 10.0f, 10.0f));
@@ -93,13 +93,13 @@ void IScene::initScene(GLFWwindow* window)
 	//set the binding locations for the textures
 	std::vector<std::string> texNames = { "BaseMap"};//, "mixMap" };
 	for (size_t i = 0; i < texNames.size(); ++i){
-		(*it_s)->setUniform(texNames[i], i);
+		(*it_s)->setUniform(texNames[i], static_cast<GLuint>(i));
 	}
 
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-	
+
 	glEnable(GL_MULTISAMPLE); //Anti-aliasing using hardware
-	glEnable(GL_DEPTH_TEST); 
+	glEnable(GL_DEPTH_TEST);
 }
 
 

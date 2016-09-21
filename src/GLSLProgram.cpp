@@ -1,5 +1,5 @@
 #include <ShaderUtils.h>
-#include <GLSLProgram.hpp>
+#include <GLSLProgram.h>
 #include <iostream>
 
 namespace GLSLShaderInfo {
@@ -23,10 +23,10 @@ namespace GLSLShaderInfo {
 }
 
 
-GLSLProgram::GLSLProgram(	const std::string& vertex_shader_fn, 
+GLSLProgram::GLSLProgram(	const std::string& vertex_shader_fn,
 							const std::string& frag_shader_fn) :
-							m_shaderProg(glCreateProgram()),
 							m_shaderObjList(),
+							m_shaderProg(glCreateProgram()),
 							m_shaderName(GLSLUtils::getFilename(vertex_shader_fn))
 {
 	if (m_shaderProg == 0) {
@@ -40,15 +40,15 @@ GLSLProgram::GLSLProgram(	const std::string& vertex_shader_fn,
 	if(!add_shader(GL_FRAGMENT_SHADER, frag_shader_fn)) {
 		throw(std::runtime_error("Error attaching the fragment shader\n"));
 	}
-		
+
 	if(!finalise()) {
-		throw(std::runtime_error("Error compiling / linking the shader program"));	
+		throw(std::runtime_error("Error compiling / linking the shader program"));
 	}
 }
 
 GLSLProgram::GLSLProgram(	const std::vector<std::string>& shader_fns) :
-							m_shaderProg(glCreateProgram()),
 							m_shaderObjList(),
+							m_shaderProg(glCreateProgram()),	
 							m_shaderName(GLSLUtils::getFilename(shader_fns[0]))
 {
 	if (m_shaderProg == 0) {
@@ -58,13 +58,13 @@ GLSLProgram::GLSLProgram(	const std::vector<std::string>& shader_fns) :
 	int numExts = sizeof(GLSLShaderInfo::extensions) / sizeof(GLSLShaderInfo::shader_file_extension);
 
 	for(auto it = shader_fns.begin(); it != shader_fns.end(); ++it) {
-		std::string ext = GLSLUtils::getExtension(*it); 
+		std::string ext = GLSLUtils::getExtension(*it);
 		GLSLShader::GLSLShaderType type = GLSLShader::VERTEX;
 		int i = 0;
 		while (i < numExts && ext != GLSLShaderInfo::extensions[i].ext) {
 			++i;
 		}
-		
+
 		if ( i == numExts ) {
 			//didn't find a match - throw exception
 			std::string errMsg = "Unrecognised extension: " + ext;
@@ -136,7 +136,7 @@ bool GLSLProgram::finalise(){
 
 	m_shaderObjList.clear();
 
-	return glGetError() == GL_NO_ERROR; 
+	return glGetError() == GL_NO_ERROR;
 }
 
 void GLSLProgram::enable(){
@@ -157,12 +157,12 @@ void GLSLProgram::bindFragDataLocation(GLuint location, const std::string& name)
 
 void GLSLProgram::setAttribute(const std::string& aName, GLint size,
 	GLenum dType, GLboolean norm, GLint stride, GLint offset){
-	GLint loc = glGetAttribLocation(m_shaderProg, aName.c_str()); 
+	GLint loc = glGetAttribLocation(m_shaderProg, aName.c_str());
 	if (loc < 0){
 		throw std::runtime_error("The attribute " + aName + " is not delcared in the " + m_shaderName + " program\n");
 	}
 	glEnableVertexAttribArray(loc);
-	glVertexAttribPointer(loc, size, dType, norm, stride, (void*)offset); 
+	glVertexAttribPointer(loc, size, dType, norm, stride, (void*)offset);
 }
 
 GLint GLSLProgram::getUniformLocation(const std::string& name){

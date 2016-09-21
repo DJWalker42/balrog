@@ -11,11 +11,11 @@ pointCloud::pointCloud(	const std::string& points_file,
 						const std::string& normal_file,
 						GLfloat pointSize):
 						Renderable(3),
-						m_normals(normal_file.empty()? false : true),	
 						m_vVertices(),
-						m_vColour(),
 						m_vNormals(),
+						m_vColour(),					
 						m_pointSize(pointSize),
+						m_normals(normal_file.empty()? false : true),
 						m_numFloats(0),
 						m_max_x(0.f),
 						m_max_y(0.f),
@@ -25,7 +25,7 @@ pointCloud::pointCloud(	const std::string& points_file,
 						m_sum_y(0.f),
 						m_sum_z(0.f),
 						m_listSkip()
-{	
+{
 	std::string error_msg = "pointCloud error: ";
 	//populate the m_vVerticies and the m_vColour vectors
 	if(!readPointCloud(points_file)) throw std::runtime_error(error_msg + "failed to read point cloud file");
@@ -81,7 +81,7 @@ bool pointCloud::readPointCloud(const std::string& fn)
 		std::string line;
 		int linearIndex = 0;
 
-		while(std::getline(file, line))	{			
+		while(std::getline(file, line))	{
 			if(!readPoint(line))
 				m_listSkip.push_back(linearIndex);
 			linearIndex++;
@@ -102,14 +102,14 @@ bool pointCloud::readImage(const std::string& filename)
 	if(filename.empty()){
 		m_vColour.reserve(m_numFloats);
 		for(int i = 0; i < m_numFloats; ++i)
-			m_vColour.push_back(100); //set grey default colour 
+			m_vColour.push_back(100); //set grey default colour
 		return true;
 	} else {
 		//todo: read file for colour data
 		std::cout << "readImage(" << filename << ") not yet implemented. Grey set by default." << std::endl;
 		m_vColour.reserve(m_numFloats);
 		for (int i = 0; i < m_numFloats; ++i)
-			m_vColour.push_back(100); //set grey default colour 
+			m_vColour.push_back(100); //set grey default colour
 		return true;
 	}
 }
