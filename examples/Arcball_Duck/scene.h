@@ -3,17 +3,17 @@
 
 #include <IScene.h>
 
-class myScene : public IScene
-{
+class myScene : public IScene {
 public:
 	myScene(const std::vector<Renderable*>& pRendObjs,
 			GLSLProgram* pShader,
 			camControl* pCamControl = nullptr);
 
-	virtual void initScene(GLFWwindow* window);
-	virtual void updateScene(double prevTime, double currTime, bool pause, GLFWwindow* window);
+	void initScene(GLFWwindow* window) override;
+	void updateScene(double prevTime, double currTime, bool pause,
+		GLFWwindow* window) override;
 private:
-	glm::vec3 m_accumulate; 
+	glm::vec3 m_accumulate;
 };
 
 #endif

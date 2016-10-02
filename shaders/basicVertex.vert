@@ -1,14 +1,14 @@
-#version 420 core
-//#version 440 core
-//#version 450 core
+#version 410 core
 
 in vec3 position;
-in vec3 normal;
 in vec2 texCoord;
+in vec3 normal;
+
 
 out vec3 fragPos;
 out vec2 fragTex;
 out vec3 fragNorm;
+
 
 uniform mat4 modelView;
 uniform mat3 normMat;

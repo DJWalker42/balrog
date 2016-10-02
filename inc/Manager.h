@@ -6,15 +6,31 @@
 
 namespace app{
 
-	enum camCtrl { ARC, FREE, WASD };
+	class Manager {
+	private:
+		Manager(GLFWwindow* win, IScene* scene, camControl& camCtrl, const glm::vec4& clear_colour);
 
-	void initViewPort(	GLFWwindow* window, 
-						Camera* pCamera, 
-						camCtrl whichCtrl, 
-						const glm::vec3& translateSpeeds = glm::vec3(.05f), 
-						const glm::vec3& rotateSpeeds = glm::vec3(.05f));
+	public:
+		Manager(const Manager&) = delete;
+		void operator=(const Manager&) = delete;
 
-	void run(IScene* pScene, const glm::vec4& clearColour = glm::vec4(0.f), GLFWwindow* window = nullptr );
+	public:
+		static Manager& getInstance(GLFWwindow* window, IScene* scene, camControl& cam_control, const glm::vec4& clear_colour = glm::vec4(0.f)){
+			static Manager man(window, scene, cam_control, clear_colour);
+			return man;
+		}
+
+		int run();
+
+	private:
+		GLFWwindow* p_glfw_win;
+		IScene* p_scene;
+		camControl& m_camCtrl;
+		glm::vec4 m_clear_colour;
+		const glm::vec3 m_base_translate;
+		const glm::vec3 m_base_rotate;
+	};
+
 }
 
 #endif

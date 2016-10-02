@@ -27,7 +27,7 @@ BasicMesh::BasicMesh(	const glm::mat4& model,
 		clear();
 		throw std::runtime_error("Exception reading " + m_meshFile + " due to: " + assImport.GetErrorString());
 	}
-	glBindVertexArray(0);
+	//glBindVertexArray(0);
 }
 
 BasicMesh::~BasicMesh()
@@ -69,7 +69,7 @@ bool BasicMesh::initFromScene(const aiScene* pScene, const std::string& filename
 	std::vector<glm::vec3> positions;
 	std::vector<glm::vec2> texcoords;
 	std::vector<glm::vec3> normals;
-	std::vector<size_t> indices;
+	std::vector<unsigned int> indices;
 
 	size_t numVertices = 0;
 	size_t numIndices = 0;
@@ -90,7 +90,7 @@ bool BasicMesh::initFromScene(const aiScene* pScene, const std::string& filename
 	texcoords.reserve(numVertices);
 	indices.reserve(numIndices);
 
-	// Initialize the meshes in the scene one by one
+	// Initialise the meshes in the scene one by one
 	for (size_t i = 0; i < m_entries.size(); i++) {
 		const aiMesh* paiMesh = pScene->mMeshes[i];
 		initMesh(paiMesh, positions, texcoords, normals, indices);
@@ -121,7 +121,7 @@ void BasicMesh::initMesh(	const aiMesh* paiMesh,
 							std::vector<glm::vec3>& Positions,
 							std::vector<glm::vec2>& TexCoords,
 							std::vector<glm::vec3>& Normals,
-							std::vector<size_t>& Indices)
+							std::vector<unsigned int>& Indices)
 {
 	const aiVector3D Zero3D(0.0f, 0.0f, 0.0f);
 

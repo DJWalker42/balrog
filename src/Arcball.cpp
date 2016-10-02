@@ -1,28 +1,26 @@
 #include <Arcball.h>
 #include <algorithm> //std::min
 
-
 /**
 * Constructor.
 * @param roll_speed the speed of rotation
 * @param zoom_speed is the speed at which the camera zooms in/out
 */
-Arcball::Arcball(	GLfloat roll_speed,
-					GLfloat zoom_speed) :
-					camControl(glm::vec3(zoom_speed), glm::vec3(roll_speed)),
-					m_clicked(false),
-					m_dragging(false),
-					m_zoom_pos(false),
-					m_zoom_neg(false),
-					m_angle(0.f),
-					m_prevTrans(1.f),
-					m_currTrans(1.f),					
-					m_camAxis(0.f, 1.f, 0.f)
+Arcball::Arcball() :
+	camControl(),
+	m_clicked(false),
+	m_dragging(false),
+	m_zoom_pos(false),
+	m_zoom_neg(false),
+	m_angle(0.f),
+	m_prevTrans(1.f),
+	m_currTrans(1.f),
+	m_camAxis(0.f, 1.f, 0.f)
 {}
 
 /**
 * Convert the mouse cursor coordinate on the window (i.e. from (0,0) to (windowWidth, windowHeight))
-* into normalized screen coordinate , i.e. (-1, -1) to (1, 1)
+* into normalised screen coordinate , i.e. (-1, -1) to (1, 1)
 */
 glm::vec3 Arcball::toScreenCoord(double x, double y)
 {
@@ -36,7 +34,7 @@ glm::vec3 Arcball::toScreenCoord(double x, double y)
 	coord.y = glm::clamp(coord.y, -1.0f, 1.0f);
 
 	float length_squared = coord.x * coord.x + coord.y * coord.y;
-	if (length_squared <= 1.0) {
+	if (length_squared < 1.0) {
 		coord.z = sqrt(1.f - length_squared);
 	} else {
 		coord = glm::normalize(coord);
@@ -72,6 +70,7 @@ void Arcball::mouseButtonCallbackImpl(GLFWwindow * window, int button, int actio
 	if(m_clicked){
 		m_prevPos = toScreenCoord(x, y);
 	} else {
+		m_dragging = false;
 		m_prevTrans = m_currTrans;
 	}
 }
@@ -94,22 +93,7 @@ void Arcball::cursorCallbackImpl(GLFWwindow *window, double x, double y)
 			/* Cross product to get the rotation axis in camera coordinate */
 			m_camAxis = glm::cross(m_prevPos, m_currPos);
 		}
-
-	} else {
-		m_dragging = false;
-	}
-}
-
-/*
-* Check if user resized the window; adjust frustrum accordingly
-*/
-void Arcball::framebufferSizeCallbackImpl(GLFWwindow* window, int width, int height)
-{
-	glViewport(0,0,width, height);
-
-	//pass new values to the camera's frustrum to update projection matrix
-	m_pCamera->setViewWidth(static_cast<float>(width));
-	m_pCamera->setViewHeight(static_cast<float>(height));
+	} //else do nothing - mouse just moves over viewport
 }
 
 /*

@@ -72,14 +72,14 @@ void IScene::initScene(GLFWwindow* window)
 	//for our "default scene" assume only one shader program that renders (e.g. consists of a vertex and fragment shaders)
 	auto it_s = m_shaderList.begin();
 
-	//initialise each renderable (the load function bind the vertex attrubutes to the opengl buffer arrays)
+	//initialise each renderable (the load function bind the vertex attributes to the opengl buffer arrays)
 	for (auto it_r = m_renderList.begin(); it_r != m_renderList.end(); ++it_r){
 		(*it_r)->load(*it_s);
 	}
 
 	//set up the uniforms in your specific GLSL Program.
 	//he we assume there are two structures the first called Light that has position and intensity data members,
-	//and the sceond called Material that has coefficients for diffuse, specular, and ambient reflection properties, as
+	//and the second called Material that has coefficients for diffuse, specular, and ambient reflection properties, as
 	//well as a shinyness factor (i.e. a Phong model of shading).
 	(*it_s)->setUniform("Light.Position", glm::vec4(0.0f, 1.0f, 5.0f, 1.0f));
 	(*it_s)->setUniform("Light.Intensity", glm::vec3(10.0f, 10.0f, 10.0f));

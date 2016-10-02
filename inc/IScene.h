@@ -11,10 +11,10 @@ enum projection { FOV, ASPECT };
 /*
 	Interface base class for a "Scene". 
 
-	You can derive your own "Scene" class from this interface and provide differnt defintions for
+	You can derive your own "Scene" class from this interface and provide different definitions for
 	initScene(), updateScene(), and drawScene().
 
-	As designed IScene class consists of a vector of renerable objects, at least one complied and 
+	As designed IScene class consists of a vector of renderable objects, at least one complied and
 	linked GLSLProgram used to actually render the Renderables, and a camControl 
 	method to view and/or move around the scene.
 

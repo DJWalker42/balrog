@@ -15,7 +15,7 @@ Cube::Cube(	const glm::mat4& model,
 	init_normals();
 	init_indices();
 
-	glBindVertexArray(0);
+	//glBindVertexArray(0);
 }
 
 Cube::~Cube()

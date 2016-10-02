@@ -1,6 +1,8 @@
 #ifndef DJW_ARCBALL_HPP
 #define DJW_ARCBALL_HPP
 
+#include <camControl.h>
+
 #include <iostream>
 
 #include <GLFW/glfw3.h>
@@ -11,16 +13,19 @@
 #include <glm/gtx/rotate_vector.hpp>
 #include <glm/gtc/matrix_inverse.hpp>
 
-#include <camControl.h>
+
 
 
 class Arcball : public camControl{
 //implement Arcball as a singleton class
 private:
-	Arcball(GLfloat roll_speed = 1.f, GLfloat zoom_speed = 1.f); 
+	Arcball();
 
-	Arcball(Arcball const&);
-	void operator=(Arcball const&); //prevent copies
+public:
+	Arcball(Arcball const&) = delete;
+	void operator=(Arcball const&) = delete;
+
+
 
 public:
 
@@ -48,12 +53,13 @@ public:
 
 	static void framebufferSizeCallback(GLFWwindow* window, int width, int height)
 	{
-		getInstance().framebufferSizeCallbackImpl(window, width, height);
+		getInstance().framebufferSizeCallbackImpl(window, width, height); //defined in base class; do not shadow.
 	}
 
 	//interface functions from camControl base class
-	virtual glm::mat4 calcModelTransform();
-	virtual void update();
+	glm::mat4 calcModelTransform() override;
+	void update() override;
+	method whoAmI() const override { return method::ARC; }
 
 private:
 	glm::vec3 toScreenCoord(double x, double y);
@@ -62,7 +68,6 @@ private:
 	void keyCallbackImpl(GLFWwindow* window, int key, int scancode, int action, int mods);
 	void mouseButtonCallbackImpl(GLFWwindow * window, int button, int action, int mods);
 	void cursorCallbackImpl(GLFWwindow *window, double x, double y);
-	void framebufferSizeCallbackImpl(GLFWwindow* window, int width, int height);
 
 private:
 	//state data

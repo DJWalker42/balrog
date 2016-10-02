@@ -1,6 +1,7 @@
 #ifndef DJW_FRUSTRUM_H
 #define DJW_FRUSTRUM_H
 
+#include <gl_core_4_1.h>
 #include <glm/glm.hpp>
 
 class Frustum {
@@ -47,13 +48,11 @@ private:
 	float m_zNear;							//!< the near depth clipping plane position
 	float m_zFar;							//!< the far depth clipping plane position
 	mutable bool m_recalcPerspectiveMatrix;	//!< does the matrix require recalculation? 
-	//(mutable as it is used in the getProjectionMatrix() function that is declared const).
+	//(mutable as it is used in the getProjectionMatrix() function that is declared constant).
 
 	enum projectionType {ORTHO, PERS, PFOV} m_projType; //!< the type of projection the frustrum represents
 
-	mutable glm::mat4 m_projectionMatrix; //the projection matrix (mutable as it is potentially recalulated in the getProjectionMatrix() function).
-
-	//const static unsigned short m_floatTolerance = 5; //unused: number of sig figs to which to except a floating point number as constant.
+	mutable glm::mat4 m_projectionMatrix; //the projection matrix (mutable as it is potentially recalculated in the getProjectionMatrix() function).
 };
 
 #endif

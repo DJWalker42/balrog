@@ -1,12 +1,10 @@
-#version 420 core
-//#version 440 core
-//#version 450 core
+#version 410 core
 
 in vec3 fragPos;
-in vec3 fragNorm;
 in vec2 fragTex;
+in vec3 fragNorm;
 
-layout(binding=0) uniform sampler2D BaseMap;
+uniform sampler2D BaseMap;
 
 out vec4 outColour;
 

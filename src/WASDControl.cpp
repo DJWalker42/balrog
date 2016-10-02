@@ -1,4 +1,5 @@
 #include <WASDControl.h>
+//#include <gl_core_4_1.h>
 
 //These hard coded file scoped variables could be added as variables to the constructor
 
@@ -11,8 +12,8 @@ static float sensitivity_y = 0.005f;
 static float maxPitchAngle = .75f;
 static float minPitchAngle = -.25f;
 
-WASDCtrl::WASDCtrl(	const glm::vec3& transSpeed, const glm::vec3& rotateSpeed) :
-					camControl(transSpeed, rotateSpeed),
+WASDCtrl::WASDCtrl() :
+					camControl(),
 					m_prevX(0.f),
 					m_prevY(0.f),
 					m_pitch(0.f)
@@ -31,9 +32,9 @@ void WASDCtrl::cursorCallbackImpl(GLFWwindow* window, double x, double y)
 {
 	float xOffset = m_prevX - float(x);
 	float yOffset = m_prevY - float(y);
-	
+
 	xOffset *= sensitivity_x;
-	yOffset *= sensitivity_y; 
+	yOffset *= sensitivity_y;
 
 	m_pitch += yOffset;
 
@@ -44,11 +45,11 @@ void WASDCtrl::cursorCallbackImpl(GLFWwindow* window, double x, double y)
 
 	if (m_pitch < minPitchAngle){
 		m_pitch = minPitchAngle;
-		yOffset = 0.f; 
+		yOffset = 0.f;
 	}
-		
+
 	m_pCamera->yaw(xOffset);
-	m_pCamera->firstPersonlookAt(yOffset); 
+	m_pCamera->firstPersonlookAt(yOffset);
 
 	m_prevX = float(x);
 	m_prevY = float(y);
@@ -59,7 +60,7 @@ void WASDCtrl::scrollCallbackImpl(GLFWwindow* window, double xOff, double yOff)
 	float FOV = m_pCamera->getFieldOfViewY();
 
 	if ( FOV >= FOVmin && FOV <= FOVmax){
-		FOV -= static_cast<float>(yOff); 
+		FOV -= static_cast<float>(yOff);
 	}
 
 	if (FOV < FOVmin){
@@ -72,17 +73,6 @@ void WASDCtrl::scrollCallbackImpl(GLFWwindow* window, double xOff, double yOff)
 
 	m_pCamera->setFieldOfViewY(FOV);
 }
-
-
-void WASDCtrl::framebufferSizeCallbackImpl(GLFWwindow* window, int width, int height)
-{
-	glViewport(0, 0, width, height);
-
-	//pass new values to the camera's frustrum to update projection matrix
-	m_pCamera->setViewWidth(static_cast<float>(width));
-	m_pCamera->setViewHeight(static_cast<float>(height));
-}
-
 
 glm::mat4 WASDCtrl::calcModelTransform()
 {

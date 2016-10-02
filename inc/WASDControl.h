@@ -5,8 +5,7 @@
 
 class WASDCtrl : public camControl{
 private:
-	WASDCtrl(	const glm::vec3& transSpeed = glm::vec3(1.f), 
-				const glm::vec3& rotateSpeed = glm::vec3(1.f));
+	WASDCtrl();
 
 	WASDCtrl(WASDCtrl const&);
 	void operator=(WASDCtrl const&);
@@ -49,8 +48,9 @@ public:
 	void setInitialY(float value) { m_prevY = value; }
 
 	//interface functions from camControl base class
-	virtual glm::mat4 calcModelTransform();
-	virtual void update();
+	glm::mat4 calcModelTransform() override;
+	void update() override;
+	method whoAmI() const override { return method::WASD; }
 
 private:
 	//callback implementations
@@ -58,7 +58,6 @@ private:
 	void mouseButtonCallbackImpl(GLFWwindow * window, int button, int action, int mods);
 	void cursorCallbackImpl(GLFWwindow *window, double x, double y);
 	void scrollCallbackImpl(GLFWwindow* window, double xoff, double yoff);
-	void framebufferSizeCallbackImpl(GLFWwindow* window, int width, int height);
 
 private: 
 	//data members

@@ -63,7 +63,7 @@ private:
 					std::vector<glm::vec3>& positions,
 					std::vector<glm::vec2>& textures,
 					std::vector<glm::vec3>& normals,
-					std::vector<size_t>& indices);
+					std::vector<unsigned int>& indices);
 
 	void clear();
 

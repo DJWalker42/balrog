@@ -138,7 +138,7 @@ bool GLSLProgram::finalise(){
 
 	m_shaderObjList.clear();
 
-	return glGetError() == GL_NO_ERROR;
+	return true;//glGetError() == GL_NO_ERROR;
 }
 
 void GLSLProgram::enable(){

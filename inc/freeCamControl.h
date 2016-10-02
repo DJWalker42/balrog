@@ -6,7 +6,7 @@
 
 class FreeCamCtrl : public camControl{
 private:
-	FreeCamCtrl(const glm::vec3& translateSpeeds = glm::vec3(1.f), const glm::vec3& rotateSpeeds = glm::vec3(1.f));
+	FreeCamCtrl();
 
 	FreeCamCtrl(FreeCamCtrl const&);
 	void operator=(FreeCamCtrl const&); //prevent copies
@@ -41,15 +41,15 @@ public:
 	}
 
 	//interface functions from camControl base class
-	virtual glm::mat4 calcModelTransform();
-	virtual void update();
+	glm::mat4 calcModelTransform() override;
+	virtual void update() override;
+	method whoAmI() const override{ return method::FREE; }
 
 private:
-	//class impelmentations of the callbacks
+	//class implementations of the callbacks
 	void keyCallbackImpl(GLFWwindow* window, int key, int scancode, int action, int mods);
 	void mouseButtonCallbackImpl(GLFWwindow * window, int button, int action, int mods);
 	void cursorCallbackImpl(GLFWwindow *window, double x, double y);
-	void framebufferSizeCallbackImpl(GLFWwindow* window, int width, int height);
 };
 
 

@@ -5,130 +5,61 @@
 
 namespace app{
 
-	/*
-		For general and demonstrative purposes we need instances of each camera control method for quick
-		and convenient access to each. In a "real" application we'd pick just one camera control method.
-
-		Specific camera control methods are implemented as Singleton Classes.
-
-	*/
-	namespace {
-		Arcball& g_camCtrlArc = Arcball::getInstance();
-		FreeCamCtrl& g_camCtrlFree = FreeCamCtrl::getInstance();
-		WASDCtrl& g_camCtrlWASD = WASDCtrl::getInstance();
-
-		GLFWwindow* g_window = nullptr;
-		bool viewPortInit = false;
-		camCtrl camCtrlChoice;
-
-		glm::vec3 baseTranslateSpeed;
-		glm::vec3 baseRotateSpeed;
-	}
-
-	void initViewPort(	GLFWwindow* window,
-						Camera* pCamera,
-						camCtrl whichCtrl,
-						const glm::vec3& tSpeeds,
-						const glm::vec3& rSpeeds)
+	Manager::Manager(GLFWwindow* win, IScene* scene, camControl& camCtrl, const glm::vec4& clear_colour) :
+		p_glfw_win(win),
+		p_scene(scene),
+		m_camCtrl(camCtrl),
+		m_clear_colour(clear_colour),
+		m_base_translate(m_camCtrl.getTranslateDistance()),
+		m_base_rotate(m_camCtrl.getRotateAngle())
 	{
-		switch(whichCtrl) {
-		case ARC:
-			camCtrlChoice = ARC;
+		switch(m_camCtrl.whoAmI()) {
+		case camControl::method::ARC:
 
-			glfwSetKeyCallback(window, &Arcball::keyCallback);
-			glfwSetMouseButtonCallback(window, &Arcball::mouseButtonCallback);
-			glfwSetCursorPosCallback(window, &Arcball::cursorCallback);
-			glfwSetFramebufferSizeCallback(window, &Arcball::framebufferSizeCallback);
-
-			g_camCtrlArc.registerCamera(pCamera);
-			g_camCtrlArc.setTranslateDistance(tSpeeds);
-			g_camCtrlArc.setRotateAngle(rSpeeds);
+			glfwSetKeyCallback(p_glfw_win, &Arcball::keyCallback);
+			glfwSetMouseButtonCallback(p_glfw_win, &Arcball::mouseButtonCallback);
+			glfwSetCursorPosCallback(p_glfw_win, &Arcball::cursorCallback);
+			glfwSetFramebufferSizeCallback(p_glfw_win, &Arcball::framebufferSizeCallback);
 
 			break;
-		case FREE:
-			camCtrlChoice = FREE;
+		case camControl::method::FREE:
 
-			glfwSetKeyCallback(window, &FreeCamCtrl::keyCallback);
-			glfwSetMouseButtonCallback(window, &FreeCamCtrl::mouseButtonCallback);
-			glfwSetCursorPosCallback(window, &FreeCamCtrl::cursorCallback);
-			glfwSetFramebufferSizeCallback(window, &FreeCamCtrl::framebufferSizeCallback);
+			glfwSetKeyCallback(p_glfw_win, &FreeCamCtrl::keyCallback);
+			glfwSetMouseButtonCallback(p_glfw_win, &FreeCamCtrl::mouseButtonCallback);
+			glfwSetCursorPosCallback(p_glfw_win, &FreeCamCtrl::cursorCallback);
+			glfwSetFramebufferSizeCallback(p_glfw_win, &FreeCamCtrl::framebufferSizeCallback);
 
-			g_camCtrlFree.registerCamera(pCamera);
-			g_camCtrlFree.setTranslateDistance(tSpeeds);
-			g_camCtrlFree.setRotateAngle(rSpeeds);
 			break;
-		case WASD:
-			camCtrlChoice = WASD;
+		case camControl::method::WASD:
 
-			glfwSetKeyCallback(window, &WASDCtrl::keyCallback);
-			glfwSetMouseButtonCallback(window, &WASDCtrl::mouseButtonCallback);
-			glfwSetScrollCallback(window, &WASDCtrl::scrollCallback);
-			glfwSetCursorPosCallback(window, &WASDCtrl::cursorCallback);
-			glfwSetFramebufferSizeCallback(window, &WASDCtrl::framebufferSizeCallback);
-
-			g_camCtrlWASD.registerCamera(pCamera);
-			g_camCtrlWASD.setTranslateDistance(tSpeeds);
-			g_camCtrlWASD.setRotateAngle(rSpeeds);
+			glfwSetKeyCallback(p_glfw_win, &WASDCtrl::keyCallback);
+			glfwSetMouseButtonCallback(p_glfw_win, &WASDCtrl::mouseButtonCallback);
+			glfwSetScrollCallback(p_glfw_win, &WASDCtrl::scrollCallback);
+			glfwSetCursorPosCallback(p_glfw_win, &WASDCtrl::cursorCallback);
+			glfwSetFramebufferSizeCallback(p_glfw_win, &WASDCtrl::framebufferSizeCallback);
 
 			double x, y;
-			glfwGetCursorPos(window, &x, &y);
-			g_camCtrlWASD.setInitialX(pCamera->getViewWidth() / 2.f);
-			g_camCtrlWASD.setInitialY(float(y));
+			glfwGetCursorPos(p_glfw_win, &x, &y);
+			static_cast<WASDCtrl&>(m_camCtrl).setInitialX(m_camCtrl.getCameraPtr()->getViewWidth() / 2.f);
+			static_cast<WASDCtrl&>(m_camCtrl).setInitialY(float(y));
+
+			break;
+
+		default:
+			//cannot be accessed
 			break;
 		}
 
-		baseTranslateSpeed = tSpeeds;
-		baseRotateSpeed = rSpeeds;
+		//set up the clear colour
+		glClearColor(m_clear_colour[0], m_clear_colour[1], m_clear_colour[2], m_clear_colour[3]);
 
-		g_window = window;
-		viewPortInit = true;
+		p_scene->setCameraControl(&m_camCtrl);
+		p_scene->initScene(p_glfw_win);
+
+
 	}
 
-	/* Ou est la pScene? */
-
-	void run(IScene* pScene, const glm::vec4& clear, GLFWwindow* window)
-	{
-		//set up the clear colour
-		glClearColor(clear[0], clear[1], clear[2], clear[3]);
-
-		//ensure we have a valid GLFWwidow pointer either set using initViewPort or passed in as an argument
-		if (g_window == nullptr) {
-			if(window){
-				g_window = window;
-			} else {
-				std::cerr << "\nNo glfw window specified\n\n";
-				glfwTerminate();
-				return;
-			}
-		}
-
-		//ensure we have a valid camControl pointer either set to one of the ones above
-		// or set in the calling environment
-		if (pScene->getCamCtrlPtr() == nullptr) {
-			if(!viewPortInit) {
-				std::cerr << "\nNo camera control method specified\n\n";
-				glfwTerminate();
-				return;
-			}
-
-			switch(camCtrlChoice){
-			case ARC:
-				pScene->setCameraControl(&g_camCtrlArc);
-				break;
-			case FREE:
-				pScene->setCameraControl(&g_camCtrlFree);
-				break;
-			case WASD:
-				pScene->setCameraControl(&g_camCtrlWASD);
-				break;
-			}
-		}
-
-		camControl* p_localCamCtrl = pScene->getCamCtrlPtr();
-
-		//initialise the scene - user defined but typically consists of initialising each renderable's buffer data
-		// setting up some constant variables/shader uniforms, enabling the opengl depth test, etc.
-		pScene->initScene(g_window);
+	int Manager::run(){
 
 		//used to implement a pause functionality
 		int prevState = 0;
@@ -136,14 +67,14 @@ namespace app{
 		double prevTime = 0.;
 
 		//main loop
-		while (!glfwWindowShouldClose(g_window)) {
+		while (!glfwWindowShouldClose(p_glfw_win)) {
 			glfwPollEvents(); //check for user interaction, key presses, mouse move, mouse button clicks, etc.
 
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 			glEnable(GL_DEPTH_TEST);
 
 			//check if user has pressed 'P'
-			int state = glfwGetKey(g_window, GLFW_KEY_P);
+			int state = glfwGetKey(p_glfw_win, GLFW_KEY_P);
 			if (state == GLFW_PRESS && prevState != state) { //second condition avoids rapid toggling when pressing 'P'
 				pause = !pause; //toggle the pause
 			}
@@ -153,21 +84,21 @@ namespace app{
 			//applying updates to renderable objects, modifying shader variables, and so on. It is here we could apply some depth sorting
 			//after the updates have been applied so that the renderable objects are draw from back to front in the view port e.g. using "oct-trees"
 			double start = glfwGetTime();
-			pScene->updateScene(prevTime, start, pause, g_window);
+			p_scene->updateScene(prevTime, start, pause, p_glfw_win);
 
 			//Render the scene - typically gets and applies changes to the model, view, and projection matrices (and any associated matrices,
 			//for example, the normal matrix) then calls the render member function for each object in the renderable list (vector).
-			pScene->drawScene();
+			p_scene->drawScene();
 
-			glfwSwapBuffers(g_window); //uses double buffering - front buffer is displayed while back buffer is being drawn, swaps buffers at screen refresh rate(?)
+			glfwSwapBuffers(p_glfw_win); //uses double buffering - front buffer is displayed while back buffer is being drawn, swaps buffers at screen refresh rate(?)
 
 
 			//first attempt at normalising the "speed" of the application depending on the hardware on which it is run.
 			double elapsed = glfwGetTime() - start;
-			p_localCamCtrl->setTranslateDistance(baseTranslateSpeed * float(elapsed));
+			m_camCtrl.setTranslateDistance(m_base_translate * float(elapsed));
 
-			if (camCtrlChoice != ARC ) {//the arcball becomes jittery otherwise
-				p_localCamCtrl->setRotateAngle(baseRotateSpeed * float(elapsed));
+			if (m_camCtrl.whoAmI() != camControl::method::ARC ) {//the arcball becomes jittery otherwise
+				m_camCtrl.setRotateAngle(m_base_rotate * float(elapsed));
 			}
 
 			prevTime = start;
@@ -175,6 +106,7 @@ namespace app{
 
 		//finished with glfw so terminate.
 		glfwTerminate();
+		return 0;
 	}
 
-}
+}//app

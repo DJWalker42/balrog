@@ -1,8 +1,8 @@
 #include <freeCamControl.h>
+//#include <gl_core_4_1.h>
 
-FreeCamCtrl::FreeCamCtrl(const glm::vec3& transSpeed, const glm::vec3& rotSpeed) :
-						camControl(transSpeed, rotSpeed)
-{}
+
+FreeCamCtrl::FreeCamCtrl() : camControl() {}
 
 
 void FreeCamCtrl::keyCallbackImpl(GLFWwindow* window, int key, int scancode, int action, int mods)
@@ -15,15 +15,6 @@ void FreeCamCtrl::mouseButtonCallbackImpl(GLFWwindow * window, int button, int a
 
 void FreeCamCtrl::cursorCallbackImpl(GLFWwindow *window, double x, double y)
 {}
-
-void FreeCamCtrl::framebufferSizeCallbackImpl(GLFWwindow* window, int width, int height)
-{
-	glViewport(0, 0, width, height);
-
-	//pass new values to the camera's frustrum to update projection matrix
-	m_pCamera->setViewWidth(static_cast<float>(width));
-	m_pCamera->setViewHeight(static_cast<float>(height));
-}
 
 glm::mat4 FreeCamCtrl::calcModelTransform()
 {
