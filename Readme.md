@@ -29,6 +29,8 @@ This can be mitigated by generating the gl_core_4_x files using the pointer_cpp 
 
 The examples directory currently contains a single sample of how to use the library. You will need to link this sample with the output built from the source files, the assimp library, the glfw3 library, and the SOIL2 library. On Windows you will also need to link with opengl32.lib. You will also have to add assimp's dll to your path (or copy it to the executable directory). Note with recent changes I may have broken this - needs testing.
 
+On the Mac OSX platform if using XCode you will have to add the OpenGL and CoreFoundation frameworks to the library inputs.
+
 ###Disclaimer:
 The files contained in the resources directory are not of my creation. I obtained them from the samples directory of [MeshLab](http://meshlab.sourceforge.net/). Similarily, the data for the Sphere, Torus, and Teapot renderables were obtained via google searches.
 
