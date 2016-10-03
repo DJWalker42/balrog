@@ -3,7 +3,6 @@
 #include <Graphics.h>
 #include <Manager.h>
 #include <BasicMesh.h>
-//#include <Cube.h>
 #include <Arcball.h>
 #include "scene.h"
 

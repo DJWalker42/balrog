@@ -40,9 +40,8 @@ namespace app{
 
 			double x, y;
 			glfwGetCursorPos(p_glfw_win, &x, &y);
-			static_cast<WASDCtrl&>(m_camCtrl).setInitialX(m_camCtrl.getCameraPtr()->getViewWidth() / 2.f);
-			static_cast<WASDCtrl&>(m_camCtrl).setInitialY(float(y));
-
+			static_cast<WASDCtrl&>(m_camCtrl).setInitialXY(
+				m_camCtrl.getCameraPtr()->getViewWidth() / 2.f, float(y));
 			break;
 
 		default:

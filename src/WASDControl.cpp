@@ -3,20 +3,18 @@
 
 //These hard coded file scoped variables could be added as variables to the constructor
 
-static const float FOVmin = 10.f;
-static const float FOVmax = 60.f;
-
-static float sensitivity_x = 0.005f;
-static float sensitivity_y = 0.005f;
-
-static float maxPitchAngle = .75f;
-static float minPitchAngle = -.25f;
-
 WASDCtrl::WASDCtrl() :
 					camControl(),
-					m_prevX(0.f),
-					m_prevY(0.f),
-					m_pitch(0.f)
+					m_prev_X(0.f),
+					m_prev_Y(0.f),
+					m_pitch(0.f),
+					m_initialised(false),
+					m_min_FOV(10.f),
+					m_max_FOV(60.f),
+					m_sensitivity_x(0.005f),
+					m_sensitivity_y(0.005f),
+					m_max_pitch(.75f),
+					m_min_pitch(-.25f)
 {}
 
 
@@ -30,45 +28,45 @@ void WASDCtrl::mouseButtonCallbackImpl(GLFWwindow * window, int button, int acti
 
 void WASDCtrl::cursorCallbackImpl(GLFWwindow* window, double x, double y)
 {
-	float xOffset = m_prevX - float(x);
-	float yOffset = m_prevY - float(y);
+	float xOffset = m_prev_X - float(x);
+	float yOffset = m_prev_Y - float(y);
 
-	xOffset *= sensitivity_x;
-	yOffset *= sensitivity_y;
+	xOffset *= m_sensitivity_x;
+	yOffset *= m_sensitivity_y;
 
 	m_pitch += yOffset;
 
-	if (m_pitch > maxPitchAngle){
-		m_pitch = maxPitchAngle;
+	if (m_pitch > m_max_pitch){
+		m_pitch = m_max_pitch;
 		yOffset = 0.f;
 	}
 
-	if (m_pitch < minPitchAngle){
-		m_pitch = minPitchAngle;
+	if (m_pitch < m_min_pitch){
+		m_pitch = m_min_pitch;
 		yOffset = 0.f;
 	}
 
 	m_pCamera->yaw(xOffset);
 	m_pCamera->firstPersonlookAt(yOffset);
 
-	m_prevX = float(x);
-	m_prevY = float(y);
+	m_prev_X = float(x);
+	m_prev_Y = float(y);
 }
 
 void WASDCtrl::scrollCallbackImpl(GLFWwindow* window, double xOff, double yOff)
 {
 	float FOV = m_pCamera->getFieldOfViewY();
 
-	if ( FOV >= FOVmin && FOV <= FOVmax){
+	if ( FOV >= m_min_FOV && FOV <= m_max_FOV){
 		FOV -= static_cast<float>(yOff);
 	}
 
-	if (FOV < FOVmin){
-		FOV = FOVmin;
+	if (FOV < m_min_FOV){
+		FOV = m_min_FOV;
 	}
 
-	if (FOV > FOVmax ){
-		FOV = FOVmax;
+	if (FOV > m_max_FOV ){
+		FOV = m_max_FOV;
 	}
 
 	m_pCamera->setFieldOfViewY(FOV);

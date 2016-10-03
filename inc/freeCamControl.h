@@ -4,6 +4,19 @@
 #include <camControl.h>
 #include <array>
 
+/*
+To set callbacks in glfw from class member functions those functions have to
+be declared static. However, we want to be able to access data members of the
+class and its base from the callback function. Thus we implement the Singleton
+pattern in order to call a non-static member function from a single instance
+of the class via a factory static member function. For performace reasons we
+require that this factory function does not take any parameters. In otherwords
+all data members of the class and its base have to be default initialised then
+set to the required values using setter member functions.
+*/
+
+
+
 class FreeCamCtrl : public camControl{
 private:
 	FreeCamCtrl();
@@ -37,7 +50,7 @@ public:
 
 	static void framebufferSizeCallback(GLFWwindow* window, int width, int height)
 	{
-		getInstance().framebufferSizeCallbackImpl(window, width, height);
+		getInstance().framebufferSizeCallbackImpl(window, width, height);//defined in base class; do not shadow.
 	}
 
 	//interface functions from camControl base class

@@ -13,8 +13,16 @@
 #include <glm/gtx/rotate_vector.hpp>
 #include <glm/gtc/matrix_inverse.hpp>
 
-
-
+/*
+To set callbacks in glfw from class member functions those functions have to
+be declared static. However, we want to be able to access data members of the
+class and its base from the callback function. Thus we implement the Singleton
+pattern in order to call a non-static member function from a single instance
+of the class via a factory static member function. For performace reasons we
+require that this factory function does not take any parameters. In otherwords
+all data members of the class and its base have to be default initialised then
+set to the required values using setter member functions.
+*/
 
 class Arcball : public camControl{
 //implement Arcball as a singleton class
@@ -25,11 +33,9 @@ public:
 	Arcball(Arcball const&) = delete;
 	void operator=(Arcball const&) = delete;
 
-
-
 public:
 
-	static Arcball& getInstance() 
+	static Arcball& getInstance()
 	{
 		static Arcball s_Arcball; //first call to getInstance creates the Arcball, subsequent (internal) calls just return the instance.
 		return s_Arcball;
@@ -64,7 +70,7 @@ public:
 private:
 	glm::vec3 toScreenCoord(double x, double y);
 
-	//callbacks implementations
+	//callbacks implementations - made private as we do not want then accessed from outside the class
 	void keyCallbackImpl(GLFWwindow* window, int key, int scancode, int action, int mods);
 	void mouseButtonCallbackImpl(GLFWwindow * window, int button, int action, int mods);
 	void cursorCallbackImpl(GLFWwindow *window, double x, double y);
@@ -72,14 +78,14 @@ private:
 private:
 	//state data
 	bool m_clicked;				//!< has the mouse button been pressed?
-	bool m_dragging;			//!< has the mouse moved with the button pressed? 
+	bool m_dragging;			//!< has the mouse moved with the button pressed?
 	bool m_zoom_pos;			//!< zooming in or not
 	bool m_zoom_neg;			//!< zooming out or not
 
 
 	//internal data
 	GLfloat m_angle;			//!< angle between mouse location and origin
-	glm::mat4 m_prevTrans;		//!< the previous transformation 
+	glm::mat4 m_prevTrans;		//!< the previous transformation
 	glm::mat4 m_currTrans;		//!< the current transformation - accumulates from previous transformations
 
 	glm::vec3 m_prevPos;		//!< mouse previous position (x,y,z)

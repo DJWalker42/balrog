@@ -59,7 +59,8 @@ public:
 
 	//this returns a copy of the data member pointer with pointer-to-const-object qualifier.
 	//const Camera* getCameraPtr() const { return m_pCamera; }
-	//this returns a const pointer to the Camera object.
+	//this returns a const pointer to the Camera object i.e. we can modify the Camera object
+	//via the returned pointer but not where it points. 
 	Camera* const & getCameraPtr() const { return m_pCamera; }
 
 	void setRotateAngle(const glm::vec3& angle) { m_rotateSpeed = angle; }
@@ -91,7 +92,7 @@ public:
 		}
 	}
 
-protected:
+protected: //becomes private in derived classes
 
 	//Update relevant values on context window resize event - this is common to all camControl methods.
 	void framebufferSizeCallbackImpl(GLFWwindow* window, int width, int height){
