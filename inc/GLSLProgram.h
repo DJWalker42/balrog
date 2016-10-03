@@ -21,9 +21,11 @@ namespace GLSLShader {
 class GLSLProgram{
 public:
 	GLSLProgram(const std::string& vertex_shader_fn,
-				const std::string& frag_shader_fn);
+							const std::string& frag_shader_fn,
+							const std::string& prog_name = std::string());
 
-	GLSLProgram(std::vector<std::string> const& shader_filenames);
+	GLSLProgram(std::vector<std::string> const& shader_filenames,
+							const std::string& prog_name = std::string());
 private:
 	GLSLProgram(GLSLProgram const&);
 	void operator=(GLSLProgram const&);
@@ -35,10 +37,10 @@ public:
 	void enable();
 	void disable();
 
-	bool add_shader(GLenum shader_type, const std::string& filename);
-	bool finalise();
-
 	GLuint getProgram() const {return m_shaderProg;}
+
+	std::string getProgramName() const {return m_progName;}
+	void setProgramName(const std::string& name) {m_progName = name;}
 
 	GLint getUniformLocation(const std::string& uniformName);
 	GLint getProgramParameter(GLint parameter);
@@ -63,10 +65,21 @@ public:
 	void setUniform(const std::string& name, const glm::mat4& m);
 
 private:
+		bool add_shader(GLenum shader_type, const std::string& filename);
+		bool finalise();
+		//implicitly inline
+		void cleanUp() {
+			glDeleteProgram(m_shaderProg);
+			for(auto& shader : m_shaderObjList){
+				glDeleteShader(shader);
+			}
+		}
+
+private:
 	typedef std::vector<GLuint> shaderObjects;
 	shaderObjects m_shaderObjList;
 	GLuint m_shaderProg;
-	std::string m_shaderName;
+	std::string m_progName; //!< name for the program; default == first shader filename
 };
 
 

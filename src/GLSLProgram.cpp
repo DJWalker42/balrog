@@ -10,6 +10,7 @@ namespace GLSLShaderInfo {
 		GLSLShader::GLSLShaderType type;
 	};
 
+	//edit this struct to add more file extentions as required
 	struct shader_file_extension extensions[] =
 	{
 		{ ".vs", GLSLShader::VERTEX },
@@ -24,34 +25,40 @@ namespace GLSLShaderInfo {
 	};
 }
 
-
 GLSLProgram::GLSLProgram(	const std::string& vertex_shader_fn,
-							const std::string& frag_shader_fn) :
+							const std::string& frag_shader_fn, const std::string& prog_name) :
 							m_shaderObjList(),
 							m_shaderProg(glCreateProgram()),
-							m_shaderName(GLSLUtils::getFilename(vertex_shader_fn))
+							m_progName(prog_name.empty() ? GLSLUtils::getFilename(vertex_shader_fn) : prog_name)
 {
 	if (m_shaderProg == 0) {
-		throw(std::runtime_error("Error creating a shader program\n"));
+		throw std::runtime_error("Error creating a shader program\n");
 	}
 
 	if(!add_shader(GL_VERTEX_SHADER, vertex_shader_fn)) {
-		throw(std::runtime_error("Error attaching the vertex shader\n"));
+		glDeleteProgram(m_shaderProg);
+		throw std::runtime_error("Error attaching the vertex shader\n");
 	}
 
 	if(!add_shader(GL_FRAGMENT_SHADER, frag_shader_fn)) {
-		throw(std::runtime_error("Error attaching the fragment shader\n"));
+		glDeleteProgram(m_shaderProg);
+		glDeleteShader(m_shaderObjList[0]); //delete vertex shader
+		throw std::runtime_error("Error attaching the fragment shader\n");
 	}
 
 	if(!finalise()) {
-		throw(std::runtime_error("Error compiling / linking the shader program"));
+		glDeleteProgram(m_shaderProg);
+		glDeleteShader(m_shaderObjList[0]); //delete vertex shader
+		glDeleteShader(m_shaderObjList[1]); //delete fragment shader
+		throw std::runtime_error("Error compiling / linking the shader program");
 	}
 }
 
-GLSLProgram::GLSLProgram(	const std::vector<std::string>& shader_fns) :
+GLSLProgram::GLSLProgram(	const std::vector<std::string>& shader_fns,
+													const std::string& prog_name) :
 							m_shaderObjList(),
 							m_shaderProg(glCreateProgram()),
-							m_shaderName(GLSLUtils::getFilename(shader_fns[0]))
+							m_progName(prog_name.empty() ? GLSLUtils::getFilename(shader_fns[0]) : prog_name)
 {
 	if (m_shaderProg == 0) {
 		throw std::runtime_error("Error creating a shader program\n");
@@ -70,6 +77,7 @@ GLSLProgram::GLSLProgram(	const std::vector<std::string>& shader_fns) :
 		if ( i == numExts ) {
 			//didn't find a match - throw exception
 			std::string errMsg = "Unrecognised extension: " + ext;
+			cleanUp();
 			throw std::runtime_error(errMsg);
 		}
 
@@ -77,30 +85,23 @@ GLSLProgram::GLSLProgram(	const std::vector<std::string>& shader_fns) :
 
 		if (!add_shader(type, *it)){
 			std::string errMsg = "Error attaching shader: " + *it;
+			cleanUp();
 			throw std::runtime_error(errMsg);
 		}
 
 	}
 
 	if (!finalise()) {
+		cleanUp();
 		throw std::runtime_error("Error compiling / linking the shader program");
 	}
 }
 
 
-GLSLProgram::~GLSLProgram(){
-	/*
-		as finalise() does the shader clean-up this loop is somewhat redundant, but I like belt and braces
-		when it comes to memory de-allocation.
-	*/
-
-	for(shaderObjects::iterator it = m_shaderObjList.begin(); it != m_shaderObjList.end(); ++it) {
-		glDeleteShader(*it);
-	}
-
-	if (m_shaderProg != 0){
-		glDeleteProgram(m_shaderProg);
-		m_shaderProg = 0;
+GLSLProgram::~GLSLProgram() {
+	glDeleteProgram(m_shaderProg);
+	for(auto& shader : m_shaderObjList){
+		glDeleteShader(shader);
 	}
 }
 
@@ -121,23 +122,25 @@ bool GLSLProgram::finalise(){
 	glGetProgramiv(m_shaderProg, GL_LINK_STATUS, &success);
 	if (success == 0) {
 		GLSLUtils::print_log(m_shaderProg);
-		return false;
+		return false; //shader deletion done in constructor body
 	}
 
 	glValidateProgram(m_shaderProg);
 	glGetProgramiv(m_shaderProg, GL_VALIDATE_STATUS, &success);
 	if (success == 0) {
 		GLSLUtils::print_log(m_shaderProg);
-		return false;
+		return false; //shader deletion done in constructor body
 	}
 
+	//note that if we want to use the shaders elsewhere then we should detach them
+	//from the program and not delete them.
 	//free up memory from shader objects added to program (now compiled and linked)
 	for (shaderObjects::iterator it = m_shaderObjList.begin(); it != m_shaderObjList.end(); it++) {
 		glDeleteShader(*it);
 	}
 
 	m_shaderObjList.clear();
-
+	//FIXME: we should really check glGetError() here!
 	return true;//glGetError() == GL_NO_ERROR;
 }
 
@@ -161,7 +164,7 @@ void GLSLProgram::setAttribute(const std::string& aName, GLint size,
 	GLenum dType, GLboolean norm, GLint stride, GLint offset){
 	GLint loc = glGetAttribLocation(m_shaderProg, aName.c_str());
 	if (loc < 0){
-		throw std::runtime_error("The attribute " + aName + " is not delcared in the " + m_shaderName + " program\n");
+		throw std::runtime_error("The attribute " + aName + " is not delcared in the " + m_progName + " program\n");
 	}
 	glEnableVertexAttribArray(loc);
 	glVertexAttribPointer(loc, size, dType, norm, stride, (void*)(intptr_t)offset); //suppress warning with type cast.
@@ -170,7 +173,7 @@ void GLSLProgram::setAttribute(const std::string& aName, GLint size,
 GLint GLSLProgram::getUniformLocation(const std::string& name){
 	GLint location = glGetUniformLocation(m_shaderProg, name.c_str());
 	if (location < 0) {
-		throw std::runtime_error( "Unable to find the uniform " + name + "in the " + m_shaderName + " program\n");
+		throw std::runtime_error( "Unable to find the uniform " + name + "in the " + m_progName + " program\n");
 	}
 
 	return location;
