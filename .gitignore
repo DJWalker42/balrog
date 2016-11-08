@@ -34,9 +34,3 @@
 #custom ignores
 lib/
 obj/
-.cproject
-.project
-.settings/
-*.cproject
-*.project
-*.settings/
