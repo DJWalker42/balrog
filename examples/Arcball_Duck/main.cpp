@@ -3,7 +3,6 @@
 #include <Graphics.h>
 #include <Manager.h>
 #include <BasicMesh.h>
-#include <Arcball.h>
 #include "scene.h"
 
 /*
@@ -94,7 +93,8 @@ int main(){
     //print instructions and run the scene
     printInstructions();
     
-    app::Manager& exec = app::Manager::getInstance(window, &scene, arcball, clearColour);
-
-	return exec.run();
+    //app::Manager& exec = app::Manager::getInstance(window, &scene, arcball, clearColour);
+	
+    app::ManagerT<Arcball> exec(window, &scene, arcball, clearColour);
+    return exec.run();
 }
