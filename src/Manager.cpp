@@ -13,6 +13,12 @@ namespace app{
 		m_base_translate(m_camCtrl.getTranslateDistance()),
 		m_base_rotate(m_camCtrl.getRotateAngle())
 	{
+		/* Polymorphism cannot be used here as we are not calling a member function
+		    of a specific instance of a camControl class. In fact we are using
+				static member function pointers that are differentiated by their
+		    respective type or class name -> i.e. templating would provide an
+		    alternative solution -> see the ManagerT class in the Manager.h file
+		*/
 		switch(m_camCtrl.whoAmI()) {
 		case camControl::method::ARC:
 
