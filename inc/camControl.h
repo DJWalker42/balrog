@@ -42,7 +42,7 @@ public:
 
 	virtual glm::mat4 calcModelTransform()= 0;
 	virtual void update() = 0;
-
+	virtual void initialise(GLFWwindow* glfw_win_ptr)=0;
 	virtual method whoAmI() const = 0;
 
 	void registerCamera(Camera* pCamera)
@@ -60,7 +60,7 @@ public:
 	//this returns a copy of the data member pointer with pointer-to-const-object qualifier.
 	//const Camera* getCameraPtr() const { return m_pCamera; }
 	//this returns a const pointer to the Camera object i.e. we can modify the Camera object
-	//via the returned pointer but not where it points. 
+	//via the returned pointer but not where it points.
 	Camera* const & getCameraPtr() const { return m_pCamera; }
 
 	void setRotateAngle(const glm::vec3& angle) { m_rotateSpeed = angle; }

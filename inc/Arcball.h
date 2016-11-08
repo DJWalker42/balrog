@@ -57,6 +57,10 @@ public:
 		getInstance().cursorCallbackImpl(window, x, y);
 	}
 
+	static void scrollCallback(GLFWwindow* window, double xOffset, double yOffset){
+		/* null body intentional */
+	}
+
 	static void framebufferSizeCallback(GLFWwindow* window, int width, int height)
 	{
 		getInstance().framebufferSizeCallbackImpl(window, width, height); //defined in base class; do not shadow.
@@ -65,6 +69,7 @@ public:
 	//interface functions from camControl base class
 	glm::mat4 calcModelTransform() override;
 	void update() override;
+	void initialise(GLFWwindow* glfw_win_ptr) override {/*null body intentional*/}
 	method whoAmI() const override { return method::ARC; }
 
 private:

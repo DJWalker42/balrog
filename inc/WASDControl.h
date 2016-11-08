@@ -67,6 +67,11 @@ public:
 	//interface functions from camControl base class
 	glm::mat4 calcModelTransform() override;
 	void update() override;
+	void initialise(GLFWwindow* glfw_win_ptr) override {
+		double x, y;
+		glfwGetCursorPos(glfw_win_ptr, &x, &y);
+		setInitialXY(m_pCamera->getViewWidth() / 2.f, float(y));
+	}
 	method whoAmI() const override { return method::WASD; }
 
 	//WASD specfic getters
